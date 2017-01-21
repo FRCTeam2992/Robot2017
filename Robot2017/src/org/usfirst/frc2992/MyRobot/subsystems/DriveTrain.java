@@ -72,6 +72,11 @@ public class DriveTrain extends Subsystem {
     	
     }
     
+    public void tankDriveReverse(mhJoystick leftjoy, mhJoystick rightjoy){
+    	drivelib.tankDriveRev(leftjoy.smoothGetY(), rightjoy.smoothGetY());
+    	
+    }
+    
     public void tankDriveAuto(double left, double right){
     	drivelib.tankDrive(left, right);
     }
