@@ -46,6 +46,8 @@ public class DriveTrain extends Subsystem {
     private final Encoder leftDriveEncoder = RobotMap.driveTrainLeftDriveEncoder;
     private final Encoder rightDriveEncoder = RobotMap.driveTrainRightDriveEncoder;
     private final Solenoid driveShfitHL = RobotMap.driveTrainDriveShfitHL;
+    public double constant = 0.05;
+    public double motorOffset = 0;
     
 
 
@@ -68,12 +70,31 @@ public class DriveTrain extends Subsystem {
     }
     
     public void tankDrive(mhJoystick leftjoy, mhJoystick rightjoy){
-    	drivelib.tankDrive(leftjoy.smoothGetY(), rightjoy.smoothGetY());
+    	if(leftjoy.smoothGetY()>0 && rightjoy.smoothGetY()>0){
+    		drivelib.tankDrive(leftjoy.smoothGetY()-motorOffset, rightjoy.smoothGetY()-motorOffset);
+    	}else if(leftjoy.smoothGetY()<0 && rightjoy.smoothGetY()<0){
+    		drivelib.tankDrive(leftjoy.smoothGetY()+motorOffset, rightjoy.smoothGetY()+motorOffset);
+    	}else if(leftjoy.smoothGetY()<0 && rightjoy.smoothGetY()>0){
+    		drivelib.tankDrive(leftjoy.smoothGetY()+motorOffset, rightjoy.smoothGetY()-motorOffset);
+    	}else if(leftjoy.smoothGetY()>0 && rightjoy.smoothGetY()<0){
+    		drivelib.tankDrive(leftjoy.smoothGetY()-motorOffset, rightjoy.smoothGetY()+motorOffset);
+    	} else{ drivelib.tankDrive(leftjoy.smoothGetY(), rightjoy.smoothGetY());
+    	}
     	
     }
     
     public void tankDriveReverse(mhJoystick leftjoy, mhJoystick rightjoy){
-    	drivelib.tankDriveRev(leftjoy.smoothGetY(), rightjoy.smoothGetY());
+    	if(leftjoy.smoothGetY()>0 && rightjoy.smoothGetY()>0){
+    		drivelib.tankDriveRev(leftjoy.smoothGetY()-motorOffset, rightjoy.smoothGetY()-motorOffset);
+    	}else if(leftjoy.smoothGetY()<0 && rightjoy.smoothGetY()<0){
+    		drivelib.tankDriveRev(leftjoy.smoothGetY()+motorOffset, rightjoy.smoothGetY()+motorOffset);
+    	}else if(leftjoy.smoothGetY()<0 && rightjoy.smoothGetY()>0){
+    		drivelib.tankDriveRev(leftjoy.smoothGetY()+motorOffset, rightjoy.smoothGetY()-motorOffset);
+    	}else if(leftjoy.smoothGetY()>0 && rightjoy.smoothGetY()<0){
+    		drivelib.tankDriveRev(leftjoy.smoothGetY()-motorOffset, rightjoy.smoothGetY()+motorOffset);
+    	} else{ drivelib.tankDriveRev(leftjoy.smoothGetY(), rightjoy.smoothGetY());
+    	}
+    	
     	
     }
     
@@ -83,6 +104,9 @@ public class DriveTrain extends Subsystem {
     
     public void motorStop(){
     	drivelib.stopMotor();
+    }
+    public void MotorOffset(){
+    	motorOffset = Robot.currentlimit.Counter * constant;
     }
   
     
