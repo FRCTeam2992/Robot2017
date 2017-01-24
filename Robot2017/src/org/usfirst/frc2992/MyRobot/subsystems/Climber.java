@@ -65,4 +65,10 @@ public class Climber extends Subsystem {
     }
     
 }
+/**
+ * colorsensor.get(11);
+ * colorsensor.get(2);
+ * robot.climber.Climbstop();
+ * 
+ */
 

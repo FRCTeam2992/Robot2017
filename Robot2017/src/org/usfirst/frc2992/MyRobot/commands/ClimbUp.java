@@ -37,10 +37,17 @@ public class ClimbUp extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	this.setInterruptible(true);
+    	
+    	Robot.climber.Climbstop();
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	
+    	Robot.climber.ClimbUp();
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -50,6 +57,9 @@ public class ClimbUp extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	
+    	Robot.climber.ClimbUp();
+    	
     }
 
     // Called when another command which requires one or more of the same
