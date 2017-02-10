@@ -2,8 +2,8 @@ package org.usfirst.frc.frc2992.MyRobot.lib;
 
 import java.util.ArrayList;
 
-import org.usfirst.frc2992.MyRobot.Constants;
-import org.usfirst.frc2992.MyRobot.RobotMap;
+import org.usfirst.frc2992.Robot.Constants;
+import org.usfirst.frc2992.Robot.RobotMap;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.MotorSafety;
@@ -78,9 +78,7 @@ public class mhRobotDrive implements MotorSafety{
        
    }
    
-   public void arcadeDrive(mhJoystick joystick){
-	   double moveValue = joystick.smoothGetY();
-	   double rotateValue = joystick.smoothGetX();
+   public void arcadeDrive(double moveValue, double rotateValue){
 	   
 	   double leftMotorSpeed;
 	   double rightMotorSpeed;
@@ -105,17 +103,20 @@ public class mhRobotDrive implements MotorSafety{
 
 	    tankDrive(leftMotorSpeed, rightMotorSpeed);
    }
+   
    /**
     * used to directly set the motor powers. Generally used for autonomous with no PID.
     * 
     * @param leftspeed
     * @param rightspeed
+    * @param angleOffset -- offset from a set angle
+    * @param kP -- proportional constant
     */
    
-   public void autoDrive(double leftspeed, double rightspeed){
+   public void autoDrive(double leftspeed, double rightspeed, double angleOffset, double kP){
 	   
-	   setSpeed(leftDriveMotors, -leftspeed);
-	   setSpeed(rightDriveMotors, rightspeed);
+	   setSpeed(leftDriveMotors, -leftspeed + kP*angleOffset);
+	   setSpeed(rightDriveMotors, rightspeed + kP*angleOffset);
 	   
 	   if (!safetyHelper.isSafetyEnabled()) {
            safetyHelper.setSafetyEnabled(true);
@@ -124,6 +125,7 @@ public class mhRobotDrive implements MotorSafety{
        //make sure .feed() remains. This is mandatory for safety to work
        safetyHelper.feed();
    }
+   
    /*
    public void tuneDrive(double[] speeds){
 	   setSmartSpeed(leftDriveMotors, speeds);
@@ -135,8 +137,10 @@ public class mhRobotDrive implements MotorSafety{
 	   safetyHelper.feed();
    }
    */
+   
    /**
     * method used for smart rotation-based driving. Will be used sparingly
+    * note -- untested
     * 
     * @param x -- Joystick to return twist from
     * @param side -- left or right. side is outside of rotation
@@ -159,6 +163,7 @@ public class mhRobotDrive implements MotorSafety{
    
    /**
     * used for 4 wheel swerve drive
+    * note -- untested
     * 
     * @param joy -- joystick to control with
     * @param LF -- left front drive motor
@@ -216,12 +221,12 @@ public class mhRobotDrive implements MotorSafety{
     * @param lDistPID -- PID Controller for left side motors
     * @param rDistPID -- PID Controller for right side motors
     */
+   // this is not designed to currently work with both driving and turning. please see motion profile code for the smoother and stronger control
+   // this is for simple and straightforward single movements only. 
    public void smartDrive(double Distance, double Degrees, PIDController lDistPID, PIDController rDistPID){
    	
-		double autoDist = Distance;
-		double autoDegr = Degrees;
 		
-   	
+   	//drive straight. may need to adjust direction based on robot motor positioning and control
    	if(Math.abs(Distance) > 0.0 && Math.abs(Degrees) <= 0.01){
    		System.out.println("Driving forward");
    		lDistPID.reset();
@@ -232,24 +237,26 @@ public class mhRobotDrive implements MotorSafety{
    		lDistPID.enable();
    		rDistPID.enable();
    		
+   	//turn to a specified degree. designed for a single turn
    	}else if(Math.abs(Degrees) > 0 && Math.abs(Distance) <= 0.01){
    		System.out.println("Turning");
    		lDistPID.reset();
    		rDistPID.reset();
-   		lDistPID.setSetpoint(-Degrees); // Left side is reversed
-   		rDistPID.setSetpoint(-Degrees);
+   		lDistPID.setSetpoint(Degrees); // Left side is reversed
+   		rDistPID.setSetpoint(Degrees);
    		System.out.println("PID rotation set to: " + Degrees);
    		lDistPID.enable();
    		rDistPID.enable();
    		
    		
-   	}else{
+   	}else{ 
    		System.out.println("Stopping");
    		lDistPID.disable();
    		rDistPID.disable();
    		stopMotor();
    	}
    }
+   
    
 
    /**
