@@ -10,7 +10,25 @@ import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
 
+/**
+ * @author Jackson, team 2992
+ * 
+ * Last Updated as of 2/16/2017
+ * 
+ * This is a collection of drive code made by team 2992 over the years.
+ * 
+ * This was designed as an ease of use file to allow better control with more than 2 motors on each side of the drive train(we had 3 on each at the year of conception).
+ * Initially crafted in 2014, the code was organized in 2016 and further work began. 
+ * Currently resides solely in our robot code, but feel free to reuse, subject to WPILib copyrights
+ * This allows for easier or stronger implementation of specific functions, even if the functions can be achieved via robotDrive in WPILib libraries
+ *
+ * Major features include:
+ * -ability to resize commands to the size of your drive train as well as seamlessly function with more than 4 drive motors
+ * -built in troubleshooting for more advanced commands. outputs with System.out.println()
+ * -competition ready
+ */
 public class mhRobotDrive implements MotorSafety{
 
 	//array to hold the motor controllers
@@ -20,6 +38,7 @@ public class mhRobotDrive implements MotorSafety{
 	//Safety for robot.
 	protected MotorSafetyHelper safetyHelper;
 	
+	double kWait = 20;//milliseconds for when delays are needed
 	
 	public mhRobotDrive(ArrayList<SpeedController> leftMotors, ArrayList<SpeedController> rightMotors){
 		leftDriveMotors = leftMotors;
@@ -32,6 +51,18 @@ public class mhRobotDrive implements MotorSafety{
 		
     }
 	
+	public void setMotors(ArrayList<SpeedController> leftMotors, ArrayList<SpeedController> rightMotors){
+		leftDriveMotors = leftMotors;
+		rightDriveMotors = rightMotors;
+	}
+	
+	public ArrayList<SpeedController> getLeftMotors(){
+		return leftDriveMotors;
+	}
+	
+	public ArrayList<SpeedController> getRightMotors(){
+		return rightDriveMotors;
+	}
 	
 	
 	/**
@@ -50,7 +81,7 @@ public class mhRobotDrive implements MotorSafety{
 
 
        // Set the drive motors
-       setSpeed(leftDriveMotors, -leftspeed);   // Left motors are reversed
+       setSpeed(leftDriveMotors, leftspeed);   // Left motors are reversed
        setSpeed(rightDriveMotors, rightspeed);
        
        // Smartdashboard update
@@ -85,19 +116,19 @@ public class mhRobotDrive implements MotorSafety{
 
 	    if (moveValue > 0.0) {
 	      if (rotateValue > 0.0) {
-	        leftMotorSpeed = moveValue - rotateValue;
-	        rightMotorSpeed = Math.max(moveValue, rotateValue);
+	        leftMotorSpeed = Math.max(moveValue, rotateValue);
+	        rightMotorSpeed = moveValue - rotateValue;
 	      } else {
-	        leftMotorSpeed = Math.max(moveValue, -rotateValue);
-	        rightMotorSpeed = moveValue + rotateValue;
+	        leftMotorSpeed = moveValue + rotateValue;
+	        rightMotorSpeed = Math.max(moveValue, -rotateValue);
 	      }
 	    } else {
 	      if (rotateValue > 0.0) {
-	        leftMotorSpeed = -Math.max(-moveValue, rotateValue);
-	        rightMotorSpeed = moveValue + rotateValue;
+	        leftMotorSpeed = moveValue + rotateValue;
+	        rightMotorSpeed = -Math.max(-moveValue, rotateValue);
 	      } else {
-	        leftMotorSpeed = moveValue - rotateValue;
-	        rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
+	        leftMotorSpeed = -Math.max(-moveValue, -rotateValue);
+	        rightMotorSpeed = moveValue - rotateValue;
 	      }
 	    }
 
@@ -126,20 +157,40 @@ public class mhRobotDrive implements MotorSafety{
        safetyHelper.feed();
    }
    
-   /*
+   /**
+    * basic motion profiling function. values must be determined beforehand
+    * defaulting to 20ms delay
+    * @param speeds -- array of speed values to set
+    */
    public void tuneDrive(double[] speeds){
-	   setSmartSpeed(leftDriveMotors, speeds);
-	   setSmartSpeed(rightDriveMotors, speeds);
+	   setSmartSpeed(leftDriveMotors, speeds, kWait);
+	   setSmartSpeed(rightDriveMotors, speeds, kWait);
 	   
 	   if (!safetyHelper.isSafetyEnabled()) {
            safetyHelper.setSafetyEnabled(true);
        }
 	   safetyHelper.feed();
    }
-   */
    
    /**
-    * method used for smart rotation-based driving. Will be used sparingly
+    * 
+    * @param speeds -- array of speed values to set
+    * @param wait -- custom delay between values being set in milliseconds
+    */
+   public void tuneDrive(double[] speeds, double wait){
+	   setSmartSpeed(leftDriveMotors, speeds, wait);
+	   setSmartSpeed(rightDriveMotors, speeds, wait);
+	   
+	   if (!safetyHelper.isSafetyEnabled()) {
+           safetyHelper.setSafetyEnabled(true);
+       }
+	   safetyHelper.feed();
+   }
+   
+   
+   /**
+    * method used for rotation-based driving. Will be used sparingly
+    * designed for Tank Drive robots. 
     * note -- untested
     * 
     * @param x -- Joystick to return twist from
@@ -215,6 +266,7 @@ public class mhRobotDrive implements MotorSafety{
    
    /**
     * PID control for static wheels
+    * TODO -- separate into separate distance and rotating methods
     * 
     * @param Distance -- amount of distance to move forward
     * @param Degrees -- amount of radians to rotate
@@ -223,6 +275,7 @@ public class mhRobotDrive implements MotorSafety{
     */
    // this is not designed to currently work with both driving and turning. please see motion profile code for the smoother and stronger control
    // this is for simple and straightforward single movements only. 
+   //
    public void smartDrive(double Distance, double Degrees, PIDController lDistPID, PIDController rDistPID){
    	
 		
@@ -231,7 +284,7 @@ public class mhRobotDrive implements MotorSafety{
    		System.out.println("Driving forward");
    		lDistPID.reset();
    		rDistPID.reset();
-   		lDistPID.setSetpoint(-Distance); // Left side is reversed
+   		lDistPID.setSetpoint(Distance); // Left side is reversed
    		rDistPID.setSetpoint(Distance);
    		System.out.println("PID target set to: " + Distance);
    		lDistPID.enable();
@@ -257,22 +310,46 @@ public class mhRobotDrive implements MotorSafety{
    	}
    }
    
+   public void smartDriveRotation(double angle, PIDController turnPID){
+	   if(Math.abs(angle) >=.001){
+		   System.out.println("Turning");
+		   turnPID.reset();
+		   turnPID.setSetpoint(angle);
+		   System.out.println("PID rotation set to: " + angle);
+		   turnPID.enable();
+	   } else {
+		   System.out.println("Stopping. Angle too small.");
+		   turnPID.disable();
+		   stopMotor();
+	   }
+   }
+   
    
 
    /**
     * in progress Smart Motor Control.
+    * Internal utility method to allow for tighter motion control of motors.
+    * No PID implementation as of yet, but allows for easier implementation
     * 
     * @param speeds -- array of motor speeds. allows for precise and modifiable speed control
-    * @param motors -- array of motors to set the speed of
+    * @param delay -- amount of time between cycles in milliseconds
     */
-   /*
-   private void setSmartSpeed(SpeedController[] motors, double[] speeds){
+   
+   private void setSmartSpeed(ArrayList<SpeedController> motors, double[] speeds, double delay){
+	   Timer timer = new Timer();
+	   timer.start();
+	   System.out.println("Motor Speeds being set");
 	   for (int i=0; i <= speeds.length; i++){
+		   double old = timer.get()*1000;
 		   setSpeed(motors, speeds[i]);
-		   //motors[].set(speeds[i]);
+		   while(old >= timer.get()*1000 - delay){
+			  //wait
+		   }
+		   System.out.println("Motor Value " + i + " was set to: " + speeds[i]);
 	   }
+	   System.out.println("Finished");
    }
-   */
+   
    
    /**
     *

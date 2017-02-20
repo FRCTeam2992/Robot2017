@@ -52,7 +52,11 @@ public class ClimbUp extends Command {
     protected void execute() {
     	
     	//Robot.climber.ClimbUp();
-    	Robot.climber.ClimbControlled(leftJoy.getThrottle());
+    	if(Robot.oi.getButtonBox().getRawButton(12)){
+    		Robot.climber.ClimbControlled(leftJoy.getThrottle());
+    	} else {
+    		Robot.climber.Climbstop();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

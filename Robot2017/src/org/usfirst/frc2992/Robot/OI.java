@@ -86,6 +86,12 @@ public class OI {
     public JoystickButton TestGear4;
     public JoystickButton TestGear5;
     
+    public JoystickButton Gear1;
+    public JoystickButton Gear2;
+    public JoystickButton Gear3;
+    public JoystickButton Gear4;
+    public JoystickButton Gear5;
+    
     public JoystickButton autoA;
 	public JoystickButton autoB;
 	public JoystickButton autoC;
@@ -113,38 +119,53 @@ public class OI {
         
         
         
-        
+        /*
         rampDownAuto = new JoystickButton(buttonbox, 4);
         rampDownAuto.whileHeld(new GearPos1(0));
         rampUpAuto = new JoystickButton(buttonbox, 5);
         rampUpAuto.whileHeld(new GearPos2(0));
         deliverNot = new JoystickButton(buttonbox, 6);
-        deliverNot.whileHeld(new GearPos3(0));
+        deliverNot.whileHeld(new GearPos4(0));
         dropGear = new JoystickButton(buttonbox, 7);
-        dropGear.whileHeld(new GearPos4(0));
-        climbOnOff = new JoystickButton(buttonbox, 3);
+        dropGear.whileHeld(new GearPos5(0));
+        */
+        climbOnOff = new JoystickButton(buttonbox, 12);
         climbOnOff.whileHeld(new ClimbUp());
         
-        intakeBackwardOff = new JoystickButton(buttonbox, 2);
+        intakeBackwardOff = new JoystickButton(buttonbox, 1);
         intakeBackwardOff.whileHeld(new FeedWheelsOutStop());
-        intakeForwardOff = new JoystickButton(buttonbox, 1);
-        intakeForwardOff.whileHeld(new FeedWheelsInStop());
-        
+        intakeForwardOff = new JoystickButton(buttonbox, 2);
+        intakeForwardOff.whileHeld(new FeedWheelsSticks());
         
         TestGear1 = new JoystickButton(leftJoy, 7);
-        TestGear1.whenPressed(new GearPos1(0));
+        TestGear1.whenPressed(new GearPos1());
         
         TestGear2 = new JoystickButton(leftJoy, 8);
-        TestGear2.whenPressed(new GearPos2(0));
+        TestGear2.whenPressed(new GearPos2());
         
         TestGear3 = new JoystickButton(leftJoy, 9);
-        TestGear3.whenPressed(new GearPos2_5(0));
+        TestGear3.whenPressed(new GearPos3());
         
         TestGear4 = new JoystickButton(leftJoy, 10);
-        TestGear4.whenPressed(new GearPos3(0));
+        TestGear4.whenPressed(new GearPos4());
         
         TestGear5 = new JoystickButton(leftJoy, 11);
-        TestGear5.whenPressed(new GearPos4(0));
+        TestGear5.whenPressed(new GearPos5());
+        
+        Gear1 = new JoystickButton(buttonbox, 6);
+        Gear1.whenPressed(new GearPos1());
+        
+        Gear2 = new JoystickButton(buttonbox, 5);
+        Gear2.whenPressed(new GearPos2());
+        
+        Gear3 = new JoystickButton(buttonbox, 16);
+        Gear3.whenPressed(new GearPos3());
+        
+        Gear4 = new JoystickButton(buttonbox, 4);
+        Gear4.whenPressed(new GearPos4());
+        
+        Gear5 = new JoystickButton(buttonbox, 9);
+        Gear5.whenPressed(new GearPos5());
         
         autoA = new JoystickButton(buttonbox, 13);
         autoB = new JoystickButton(buttonbox, 14);
@@ -156,11 +177,11 @@ public class OI {
         SmartDashboard.putData("DriveSticks", new DriveSticks());
         SmartDashboard.putData("ClimbUp", new ClimbUp());
         SmartDashboard.putData("ClimbStop", new ClimbStop());
-        SmartDashboard.putData("GearPos1", new GearPos1(0));
-        SmartDashboard.putData("GearPos2", new GearPos2(0));
-        SmartDashboard.putData("Gear Position 2.5", new GearPos2_5(0));
-        SmartDashboard.putData("GearPos3", new GearPos3(0));
-        SmartDashboard.putData("GearPos4", new GearPos4(0));
+        SmartDashboard.putData("GearPos1", new GearPos1());
+        SmartDashboard.putData("GearPos2", new GearPos2());
+        SmartDashboard.putData("Gear Position 2.5", new GearPos3());
+        SmartDashboard.putData("GearPos3", new GearPos4());
+        SmartDashboard.putData("GearPos4", new GearPos5());
         SmartDashboard.putData("FeedWheelsInStop", new FeedWheelsInStop());
         SmartDashboard.putData("DriveSticks", new DriveSticks());
         SmartDashboard.putData("DriveSticksReverse", new DriveSticksReverse());

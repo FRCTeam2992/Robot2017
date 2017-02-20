@@ -4,15 +4,14 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class GearPos4 extends CommandGroup {
+public class GearPos5 extends CommandGroup {
 	
     
-    public GearPos4() {
+    public GearPos5() {
     	addSequential(new GearUpTo2());
     	addSequential(new GearUpTo3());
     	addSequential(new GearUpTo4());
-		addSequential(new GearDownTo4());
-    
+    	addSequential(new GearUpTo5());
     }
 
 }

@@ -10,10 +10,12 @@ import org.usfirst.frc2992.Robot.*;
 
 	public class RotatePID implements PIDOutput {
 
-		private ArrayList<SpeedController> mDrive;
+		private ArrayList<SpeedController> lDrive;
+		private ArrayList<SpeedController> rDrive;
 
-		public RotatePID (ArrayList<SpeedController> motors) {
-			mDrive = motors;
+		public RotatePID (ArrayList<SpeedController> lMotors, ArrayList<SpeedController> rMotors) {
+			lDrive = lMotors;
+			rDrive = rMotors;
 		}
 		
 		@Override
@@ -23,8 +25,11 @@ import org.usfirst.frc2992.Robot.*;
 			// double gyroCorrection = mGyro.getAngle();
 			
 			// Ignore gyro correction for now
-			for (SpeedController m : mDrive) {
+			for (SpeedController m : lDrive) {
 				m.set(output);
+			}
+			for(SpeedController m : rDrive){
+				m.set(-output);;
 			}
 
 		}

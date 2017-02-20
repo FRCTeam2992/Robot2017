@@ -2,6 +2,18 @@ package org.usfirst.frc.frc2992.MyRobot.lib;
 
 import edu.wpi.first.wpilibj.Joystick;
 
+/**
+ * 
+ * @author Jackson, team 2992
+ * 
+ * This is a collection of Joystick code made by team 2992 over the years.
+ * 
+ * This was designed to more easily smooth out our joysticks for competition use. Simple .set(Joystick.get()) is very jerky for FRC purposes
+ * 	and the base function utilizes a cubic smooth for the joystick outputs as well as a 10% deadzone. 
+ * Initially crafted in 2014, the code was organized in 2016, and further work began.
+ * Currently resides solely in our robot code, but feel free to reuse, subject to WPILib copyrights. 
+ *
+ */
 public class mhJoystick extends Joystick{
 
 	public mhJoystick(int port) {

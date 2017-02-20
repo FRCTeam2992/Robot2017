@@ -115,21 +115,38 @@ public class RobotMap {
         
         rightmotors.add(driveTrainR1Motor = new CANTalon(2));
         LiveWindow.addActuator("DriveTrain", "R1Motor", (LiveWindowSendable) driveTrainR1Motor);
-        driveTrainR1Motor.setInverted(true);
+        driveTrainR1Motor.setInverted(false);
         
         rightmotors.add(driveTrainR2Motor = new CANTalon(4));
         LiveWindow.addActuator("DriveTrain", "R2Motor", (LiveWindowSendable) driveTrainR2Motor);
-        driveTrainR2Motor.setInverted(true);
+        driveTrainR2Motor.setInverted(false);
         
         rightmotors.add(driveTrainR3Motor = new CANTalon(7));
         LiveWindow.addActuator("DriveTrain", "R3Motor", (LiveWindowSendable) driveTrainR3Motor);
-        driveTrainR3Motor.setInverted(true);
+        driveTrainR3Motor.setInverted(false);
         
         climberClimbAMotor = new CANTalon(5);
         LiveWindow.addActuator("Climber", "ClimbAMotor", (LiveWindowSendable) climberClimbAMotor);
         
+        climberClimbBMotor = new Talon(2); // 2 on main bot
+        LiveWindow.addActuator("Climber", "ClimbBMotor", (Talon) climberClimbBMotor);
+
+        intakeFeedLeftMotor = new VictorSP(0);// 0 on main bot
+        LiveWindow.addActuator("Intake", "FeedLeftMotor", (VictorSP) intakeFeedLeftMotor);
+        
+        intakeFeedRightMotor = new VictorSP(1);// 1 on main bot
+        LiveWindow.addActuator("Intake", "FeedRightMotor", (VictorSP) intakeFeedRightMotor);
+
+        gearSystemLeftGearHold = new Servo(3);
+        //gearSystemLeftGearHold.setBounds(2.1, 1.5, 1.5, 1.5, 0.9);
+        LiveWindow.addActuator("GearSystem", "LeftGearHold", gearSystemLeftGearHold);
+
+        gearSystemRightGearHold = new Servo(4);
+        //gearSystemRightGearHold.setBounds(2.1, 1.5, 1.5, 1.5, 0.9);
+        LiveWindow.addActuator("GearSystem", "RightGearHold", gearSystemRightGearHold);
     }
     if(state == RobotState.Test){
+    	
         leftmotors.add(driveTrainL2Motor = new Victor(1));
         LiveWindow.addActuator("DriveTrain", "L2Motor", (LiveWindowSendable) driveTrainL2Motor);
         driveTrainL2Motor.setInverted(true);
@@ -144,11 +161,11 @@ public class RobotMap {
         
         rightmotors.add(driveTrainR1Motor = new Victor(2));
         LiveWindow.addActuator("DriveTrain", "R1Motor", (LiveWindowSendable) driveTrainR1Motor);
-        driveTrainR1Motor.setInverted(true);
+        driveTrainR1Motor.setInverted(false);
         
         rightmotors.add(driveTrainR2Motor = new Victor(4));
         LiveWindow.addActuator("DriveTrain", "R2Motor", (LiveWindowSendable) driveTrainR2Motor);
-        driveTrainR2Motor.setInverted(true);
+        driveTrainR2Motor.setInverted(false);
         
         rightmotors.add(driveTrainR3Motor = new Victor(7));
         LiveWindow.addActuator("DriveTrain", "R3Motor", (LiveWindowSendable) driveTrainR3Motor);
@@ -157,12 +174,30 @@ public class RobotMap {
         climberClimbAMotor = new Victor(5);
         LiveWindow.addActuator("Climber", "ClimbAMotor", (LiveWindowSendable) climberClimbAMotor);
         
+        climberClimbBMotor = new Talon(12); // 12 on practice bot
+        LiveWindow.addActuator("Climber", "ClimbBMotor", (Talon) climberClimbBMotor);
+
+        intakeFeedLeftMotor = new VictorSP(9);// 9 on practice bot
+        LiveWindow.addActuator("Intake", "FeedLeftMotor", (VictorSP) intakeFeedLeftMotor);
+        
+        intakeFeedRightMotor = new VictorSP(8);// 8 on practice bot
+        LiveWindow.addActuator("Intake", "FeedRightMotor", (VictorSP) intakeFeedRightMotor);
+
+        gearSystemLeftGearHold = new Servo(10);// note -- figure out port on backup bot
+        gearSystemLeftGearHold.setBounds(2.1, 1.5, 1.5, 1.5, 0.9);
+        LiveWindow.addActuator("GearSystem", "LeftGearHold", gearSystemLeftGearHold);
+
+        gearSystemRightGearHold = new Servo(11);// note -- find out port on backup bot
+        gearSystemRightGearHold.setBounds(2.1, 1.5, 1.5, 1.5, 0.9);
+        LiveWindow.addActuator("GearSystem", "RightGearHold", gearSystemRightGearHold);
+        
     }
         
-        driveTrainLeftDriveEncoder = new Encoder(0, 1, true, EncodingType.k4X);
+        driveTrainLeftDriveEncoder = new Encoder(0, 1, false, EncodingType.k4X);
         LiveWindow.addSensor("DriveTrain", "LeftDriveEncoder", driveTrainLeftDriveEncoder);
         driveTrainLeftDriveEncoder.setDistancePerPulse((6* 3.14 * 24) / (128 * 60 * 3));
         driveTrainLeftDriveEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
+        
         driveTrainRightDriveEncoder = new Encoder(2, 3, true, EncodingType.k4X);
         LiveWindow.addSensor("DriveTrain", "RightDriveEncoder", driveTrainRightDriveEncoder);
         driveTrainRightDriveEncoder.setDistancePerPulse((6* 3.14 * 24) / (128 * 60 * 3));
@@ -170,27 +205,6 @@ public class RobotMap {
         
         driveTrainDriveShfitHL = new Solenoid(0);
         LiveWindow.addActuator("DriveTrain", "DriveShfitHL", driveTrainDriveShfitHL);
-        
-       
-        climberClimbBMotor = new Talon(12);//change back to 2 // 12 on practice bot
-        LiveWindow.addActuator("Climber", "ClimbBMotor", (Talon) climberClimbBMotor);
-        
-        //climberClimbColorSensor = new DigitalInput(5);
-        //LiveWindow.addSensor("Climber", "ClimbColorSensor", climberClimbColorSensor);
-        
-        intakeFeedLeftMotor = new VictorSP(9);//change back to 0 // 9 on practice bot
-        LiveWindow.addActuator("Intake", "FeedLeftMotor", (VictorSP) intakeFeedLeftMotor);
-        
-        intakeFeedRightMotor = new VictorSP(8);//change back to 1 // 8 on practice bot
-        LiveWindow.addActuator("Intake", "FeedRightMotor", (VictorSP) intakeFeedRightMotor);
-        
-        gearSystemLeftGearHold = new Servo(0);
-        gearSystemLeftGearHold.setBounds(2.1, 1.5, 1.5, 1.5, 0.9);
-        LiveWindow.addActuator("GearSystem", "LeftGearHold", gearSystemLeftGearHold);
-        
-        gearSystemRightGearHold = new Servo(11);
-        gearSystemRightGearHold.setBounds(2.1, 1.5, 1.5, 1.5, 0.9);
-        LiveWindow.addActuator("GearSystem", "RightGearHold", gearSystemRightGearHold);
         
         //gearSystemGearLoadedSensor = new DigitalInput(4);
         //LiveWindow.addSensor("GearSystem", "GearLoadedSensor", gearSystemGearLoadedSensor);

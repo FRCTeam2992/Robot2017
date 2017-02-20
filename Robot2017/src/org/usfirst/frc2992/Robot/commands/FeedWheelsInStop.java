@@ -42,7 +42,11 @@ public class FeedWheelsInStop extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intake.FeedIn();
+    	if(Robot.oi.getButtonBox().getRawButton(2)){
+    		Robot.intake.FeedIn();
+    	} else {
+    		Robot.intake.FeedOff();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

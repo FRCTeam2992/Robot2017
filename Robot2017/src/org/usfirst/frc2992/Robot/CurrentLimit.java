@@ -32,6 +32,11 @@ public class CurrentLimit {
 		LimitCurrent();
 	}
 	
+	public void AddLoop(){
+		SenseCurrent();
+		AddCurrent();
+	}
+	
 	
 	
 	public void SenseCurrent(){
@@ -64,6 +69,10 @@ public class CurrentLimit {
 		
 		
 		
+	}
+	
+	public double getCurrent(){
+		return wholeCurrent;
 	}
 	
 	

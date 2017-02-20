@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.frc2992.MyRobot.lib.mhJoystick;
 import org.usfirst.frc2992.Robot.OI;
 import org.usfirst.frc2992.Robot.Robot;
+import org.usfirst.frc2992.Robot.RobotMap;
 
 /**
  *
@@ -52,10 +53,26 @@ public class DriveSticks extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
+    	if(Robot.oi.getRightJoy().getTrigger()){
+    		RobotMap.driveTrainDriveShfitHL.set(false);
+    	} else {
+    		RobotMap.driveTrainDriveShfitHL.set(true);
+    	}
+    	
+    	if(Robot.oi.getLeftJoy().getRawButton(5)){
+    		Robot.driveTrain.setTankDrive(true);
+    	}
+    	if(Robot.oi.getLeftJoy().getRawButton(6)){
+    		Robot.driveTrain.setTankDrive(false);
+    	}
     	leftJoy = Robot.oi.getLeftJoy();
     	rightJoy = Robot.oi.getRightJoy();
-    	Robot.driveTrain.ArcadeDrive(leftJoy, rightJoy);
     	
+    	if(Robot.driveTrain.isTankDrive()){
+    		Robot.driveTrain.tankDrive(leftJoy, rightJoy);
+    	} else {
+    		Robot.driveTrain.ArcadeDrive(leftJoy, rightJoy);
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()

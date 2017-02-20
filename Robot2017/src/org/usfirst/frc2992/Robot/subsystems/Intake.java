@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Intake extends Subsystem {
-	final double feedSpeed = .4;
+	final double feedSpeed = -.4;
 	final double feedConstant = 1;
 	
 	double feedValue = 0;

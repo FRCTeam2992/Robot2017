@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class AutoForward extends CommandGroup{
 	double delay = 8;
-	public AutoForward(){
-		addSequential( new DriveForward(24, 4));
+	public AutoForward(double dist, double time){
+		addSequential(new DriveForward(dist, time));
+		addSequential(new DriveStop());
 	}
 }

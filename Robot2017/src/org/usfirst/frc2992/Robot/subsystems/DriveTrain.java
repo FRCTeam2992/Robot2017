@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -56,26 +57,30 @@ public class DriveTrain extends Subsystem {
     public double motorOffset = 0;
    
     public final AHRS navx = RobotMap.navx;
+
     
     PIDController lDistPID, rDistPID;
     
     DrivePID lDistance, rDistance;
     
-    final double dkp = .1;
-    final double dki = .05;
-    final double dkd = .05;
+    final double dkp = .03;
+    final double dki = 0;
+    final double dkd = .12;
     
-   
+    final double gkp = .03; 
     
-    RotatePID lTurn;
+    
+    RotatePID turn;
     RotatePID rTurn;
     
-    PIDController lTurnPID;
+    PIDController turnPID;
     PIDController rTurnPID;
     
-    final double rkp = 1/90;
+    final double rkp = .03;
     final double rki = 0;
-    final double rkd = 0;
+    final double rkd = .056;
+    
+    boolean isTank = true;
     
 
 
@@ -115,20 +120,13 @@ public class DriveTrain extends Subsystem {
     	rDistPID.disable();
 
     	//check before adding again. robot dislikes
-    	lTurn = new RotatePID(this.drivelib.leftDriveMotors);
-    	lTurnPID = new PIDController(rkp, rki, rkd, navx, lTurn);
-    	lTurnPID.setOutputRange(-0.5, 0.5);
-    	lTurnPID.setInputRange(-360.0, 360.0);
-    	lTurnPID.setContinuous();
-    	lTurnPID.setAbsoluteTolerance(3);
-    	lTurnPID.disable();
-    	
-    	rTurn = new RotatePID(this.drivelib.rightDriveMotors);
-    	rTurnPID = new PIDController(rkp, rki, rkd, navx, rTurn);
-        rTurnPID.setInputRange(-360.0, 360.0);
-        rTurnPID.setContinuous();
-    	rTurnPID.setAbsoluteTolerance(3);
-    	rTurnPID.disable();
+    	turn = new RotatePID(this.drivelib.leftDriveMotors, this.drivelib.rightDriveMotors);
+    	turnPID = new PIDController(rkp, rki, rkd, navx, turn);
+    	turnPID.setOutputRange(-0.35, 0.35);
+    	turnPID.setInputRange(-360.0, 360.0);
+    	turnPID.setContinuous();
+    	turnPID.setAbsoluteTolerance(3);
+    	turnPID.disable();
     	
     }
 
@@ -137,66 +135,121 @@ public class DriveTrain extends Subsystem {
     
     
     public void tankDrive(mhJoystick leftjoy, mhJoystick rightjoy){
-    	if(leftjoy.smoothGetY()>0 && rightjoy.smoothGetY()>0){
-    		drivelib.tankDrive(leftjoy.smoothGetY()-motorOffset, rightjoy.smoothGetY()-motorOffset);
-    	}else if(leftjoy.smoothGetY()<0 && rightjoy.smoothGetY()<0){
-    		drivelib.tankDrive(leftjoy.smoothGetY()+motorOffset, rightjoy.smoothGetY()+motorOffset);
-    	}else if(leftjoy.smoothGetY()<0 && rightjoy.smoothGetY()>0){
-    		drivelib.tankDrive(leftjoy.smoothGetY()+motorOffset, rightjoy.smoothGetY()-motorOffset);
-    	}else if(leftjoy.smoothGetY()>0 && rightjoy.smoothGetY()<0){
-    		drivelib.tankDrive(leftjoy.smoothGetY()-motorOffset, rightjoy.smoothGetY()+motorOffset);
-    	} else{ drivelib.tankDrive(leftjoy.smoothGetY(), rightjoy.smoothGetY());
-    	}
+    	drivelib.tankDrive(-leftjoy.smoothGetY(), -rightjoy.smoothGetY());
+    	
     	
     }
     
     public void tankDriveReverse(mhJoystick leftjoy, mhJoystick rightjoy){
-    	if(leftjoy.smoothGetY()>0 && rightjoy.smoothGetY()>0){
-    		drivelib.tankDriveRev(leftjoy.smoothGetY()-motorOffset, rightjoy.smoothGetY()-motorOffset);
-    	}else if(leftjoy.smoothGetY()<0 && rightjoy.smoothGetY()<0){
-    		drivelib.tankDriveRev(leftjoy.smoothGetY()+motorOffset, rightjoy.smoothGetY()+motorOffset);
-    	}else if(leftjoy.smoothGetY()<0 && rightjoy.smoothGetY()>0){
-    		drivelib.tankDriveRev(leftjoy.smoothGetY()+motorOffset, rightjoy.smoothGetY()-motorOffset);
-    	}else if(leftjoy.smoothGetY()>0 && rightjoy.smoothGetY()<0){
-    		drivelib.tankDriveRev(leftjoy.smoothGetY()-motorOffset, rightjoy.smoothGetY()+motorOffset);
-    	} else{ drivelib.tankDriveRev(leftjoy.smoothGetY(), rightjoy.smoothGetY());
-    	}
-    	
-    	
+    	drivelib.tankDriveRev(CurrentCheck(-leftjoy.smoothGetY()), CurrentCheck(-rightjoy.smoothGetY()));
     }
     
     public void SmartDriveDist(double distance){
     	//drivelib.smartDrive(distance, 0, lDistPID, rDistPID);
     	lDistPID.setSetpoint(distance);
-    	rDistPID.setSetpoint(-distance);
+    	rDistPID.setSetpoint(distance);
     	lDistPID.enable();
     	rDistPID.enable();
     }
     
-    public void SmartDriveRot(double degrees){
-    	drivelib.smartDrive(0, degrees, lTurnPID, rTurnPID);
+    public void SmartDriveGyro(double heading, double power){
+    	power = Math.abs(power);
+    	lDistPID.setOutputRange(-power - gkp*calcGyroError(heading), power - gkp*calcGyroError(heading));
+    	rDistPID.setOutputRange(-power + gkp*calcGyroError(heading), power + gkp*calcGyroError(heading));
     }
+    
+    public void SmartDriveRot(double degrees){
+    	
+    	//drivelib.smartDrive(0, degrees, turnPID);
+    	turnPID.setSetpoint(degrees);
+    	turnPID.enable();
+    }
+    
+    public void SmartDrivePower(double power) {
+    	power = Math.abs(power);
+    	lDistPID.setOutputRange(-power, power);
+    	rDistPID.setOutputRange(-power, power);
+    }
+    
+    private double calcGyroError(double heading){
+    	double error = scaleAngle(navx.getAngle() - heading);
+    	if(Math.abs(error) >= 1){
+    		return error;
+    	} else {
+    		return 0;
+    	}
+    }
+    private double scaleAngle(double angle){
+    	while(angle > 180){
+    		angle -= 360;
+    	}
+    	while(angle < -180){
+    		angle += 360;
+    	}
+    	return angle;
+    }
+    
     
     public void ArcadeDrive(double move, double rotate){
     	drivelib.arcadeDrive(move, rotate);
-    	
     }
     
     public void ArcadeDrive(mhJoystick leftJoy, mhJoystick rightJoy){
     	lDistPID.disable();
     	rDistPID.disable();
-    	drivelib.arcadeDrive(rightJoy.smoothGetY()*.4, leftJoy.smoothGetX()*.4);
+    	drivelib.arcadeDrive(-rightJoy.smoothGetY(), leftJoy.smoothGetX());
     }
-    
+
     public void tankDriveAuto(double left, double right){
     	drivelib.tankDrive(left, right);
     }
     
     public void motorStop(){
     	drivelib.stopMotor();
+    	lDistPID.disable();
+    	rDistPID.disable();
+    	turnPID.disable();
     }
     public void MotorOffset(){
     	motorOffset = Robot.currentlimit.Counter * constant;
+    }
+    
+    public boolean driveDone(String type){
+    	if(type == "dist"){
+    		if(lDistPID.onTarget() && rDistPID.onTarget()){
+    			return true;
+    		} else {
+    			return false;
+    		}
+    	} else if(type == "rot"){
+    		if(turnPID.onTarget()){
+    			return true;
+    		} else {
+    			return false;
+    		}
+    	} else {
+    		return false;
+    	}
+	}
+    
+    //used to update joystick values when high current has been detected
+    private double CurrentCheck(double val){
+    	if(val > 0){
+    		val -= motorOffset;
+    	}
+    	if (val < 0){
+    		val += motorOffset;
+    	}
+    	return val;
+    }
+	
+    
+    public void setTankDrive(boolean current){
+    	isTank = current;
+    }
+    
+    public boolean isTankDrive(){
+    	return isTank;
     }
   
 }
