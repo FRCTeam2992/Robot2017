@@ -6,7 +6,6 @@ import java.util.TimerTask;
 
 import org.usfirst.frc.frc2992.MyRobot.MotionProfiling.*;
 import org.usfirst.frc2992.Robot.subsystems.DrivePID;
-import org.usfirst.frc2992.Robot.subsystems.FalseEncoder;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
@@ -21,7 +20,7 @@ public class FollowPath extends TimerTask implements FollowerOutput {
 	DrivePID leftOutput, rightOutput;
 	double leftP, rightP, leftD, rightD, heading, angleOffset;
 	RobotSegmentGroup rsg;
-	public FalseEncoder leftEnc,rightEnc;
+	public Encoder leftEnc,rightEnc;
 	final double kPR = .1;
 	double kPD;
 	
@@ -34,8 +33,8 @@ public class FollowPath extends TimerTask implements FollowerOutput {
 	public FollowPath(RobotSegmentGroup rsg){
 		this.rsg = rsg;
 		plf = new P_LoopFollower(rsg, this);
-		leftEnc = new FalseEncoder();
-		rightEnc = new FalseEncoder();
+		leftEnc = RobotMap.driveTrainLeftDriveEncoder;
+		rightEnc = RobotMap.driveTrainRightDriveEncoder;
 	}
 	
 	public void PID_LoopInit(ArrayList<SpeedController> lMotor, ArrayList<SpeedController> rMotor){

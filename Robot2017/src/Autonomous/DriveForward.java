@@ -20,9 +20,9 @@ public class DriveForward extends Command {
 	Timer totalTime;
 	double curPower;
 	
-	static final double MINPOWER = 0.2;
+	static final double MINPOWER = 0.1;
 	static final double MAXPOWER = 0.5;
-	static final double POWERRAMP = 0.01;
+	static final double POWERRAMP = 0.005;
 	
 	boolean mGyro;
 	double mHeading;

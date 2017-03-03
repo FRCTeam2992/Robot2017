@@ -13,6 +13,9 @@ public class GearUpTo4 extends Command{
 	public GearUpTo4(){
 		requires(Robot.gearSystem);
 		this.setInterruptible(false);
+		if (timer == null) {
+			timer = new Timer();
+		}
 	}
 	
 	protected void initialize(){
@@ -33,4 +36,11 @@ public class GearUpTo4 extends Command{
 		return timer.get() >= maxTime || state !=3;
 	}
 
+	protected void interrupted(){
+		
+	}
+	
+	protected void end(){
+		
+	}
 }

@@ -16,6 +16,10 @@ public class DriveTurn extends Command {
 	double mDegree;
 	double mTime;
 	Timer totalTime;
+	double power;
+	static final double MINPOWER = 0.1;
+	static final double MAXPOWER = 0.5;
+	static final double POWERRAMP = 0.005;
 
 	public DriveTurn(double degree, double time) {
 		
@@ -29,22 +33,24 @@ public class DriveTurn extends Command {
 	}
 	
 	public void initialize(){
+		power = MINPOWER;
 		this.setInterruptible(true);
 		
 		totalTime.reset();
 		totalTime.start();
+		
+		Robot.driveTrain.SmartDriveRot(mDegree);
 	}
 	
 	protected void execute(){
-		
-		Robot.driveTrain.SmartDriveRot(mDegree);
-		
+		power = Math.min(power += POWERRAMP, MAXPOWER);
+		Robot.driveTrain.turnPID.setOutputRange(-power, power);
 	}
 	 
 	@Override
 	protected boolean isFinished() {
-		if(totalTime.get() < mTime){
-    		return false; 
+		if(totalTime.get() > mTime || Robot.driveTrain.driveDone("rot")){
+    		return true; 
     	} else{
     		return true;
     	}

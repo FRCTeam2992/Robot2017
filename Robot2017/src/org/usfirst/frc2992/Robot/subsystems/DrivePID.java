@@ -17,10 +17,7 @@ public class DrivePID implements PIDOutput {
 	@Override
 	public void pidWrite(double output) {
 		
-		//get gyro angle
-		// double gyroCorrection = mGyro.getAngle();
 		
-		// Ignore gyro correction for now
 		for (SpeedController m : mDrive) {
 			m.set(output);
 		}

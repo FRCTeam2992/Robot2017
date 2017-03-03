@@ -43,7 +43,7 @@ public class GearSystem extends Subsystem {
 
 
     
-    int state;
+    int state = 3;
     
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -56,7 +56,8 @@ public class GearSystem extends Subsystem {
 
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
-    	setDefaultCommand(new GearPos3());
+    	//setDefaultCommand(new GearPos3());
+    	
     }
     
     /**
