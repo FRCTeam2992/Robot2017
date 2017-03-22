@@ -61,10 +61,11 @@ public class DriveTrain extends Subsystem {
     public final AnalogGyro gyro = RobotMap.gyro;
 
     
-    PIDController lDistPID, rDistPID;
+    public PIDController lDistPID, rDistPID;
     
     DrivePID lDistance, rDistance;
-    
+
+	double correctionConstant = .005;
     final double dkp = .03;
     final double dki = 0;
     final double dkd = .12;
@@ -73,9 +74,9 @@ public class DriveTrain extends Subsystem {
     double gkp = .03; 
     
     double nKp = 1;
-    double nKd = .15;
+    double nKd = .15; // 0 on real bot
     double mKp = 1;
-    double mKd = 1/72;
+    double mKd = 1/72; // 0 on real bot
     double errorT = 0;
     double prevErrorT = 0;
     double errorM = 0;
@@ -90,7 +91,7 @@ public class DriveTrain extends Subsystem {
     PIDController rTurnPID;
     
     final double rkp = .03;
-    final double rki = 0;
+    final double rki = .01;
     final double rkd = .056;
     
     boolean isTank = true;
@@ -116,9 +117,7 @@ public class DriveTrain extends Subsystem {
     }
     
     public DriveTrain(){
-    	if(Robot.state == RobotState.Test){
-    		gkp = .01;
-    	}
+    	
     	
     	lDistance = new DrivePID(RobotMap.leftmotors);
     	lDistPID = new PIDController(dkp, dki, dkd, dkf, leftDriveEncoder, lDistance);
@@ -135,15 +134,28 @@ public class DriveTrain extends Subsystem {
     	rDistPID.setPercentTolerance(1.0);
     	rDistPID.disable();
 
-    	//check before adding again. robot dislikes
-    	turn = new RotatePID(this.drivelib.leftDriveMotors, this.drivelib.rightDriveMotors);
-    	turnPID = new PIDController(rkp, rki, rkd, gyro, turn);
-    	turnPID.setOutputRange(-0.35, 0.35);
-    	turnPID.setInputRange(-180.0, 180.0);
-    	turnPID.setContinuous();
-    	turnPID.setAbsoluteTolerance(3);
-    	turnPID.disable();
+		turn = new RotatePID(this.drivelib.leftDriveMotors, this.drivelib.rightDriveMotors);
     	
+    	if(Robot.state == RobotState.Test){
+    		gkp = .05; // for drive straight gyro correction
+    		
+        	turnPID = new PIDController(rkp, rki, rkd, gyro, turn);//change to navx for real robot
+        	turnPID.setOutputRange(-0.35, 0.35);
+        	turnPID.setInputRange(-180.0, 180.0);
+        	turnPID.setContinuous();
+        	turnPID.setAbsoluteTolerance(3);
+        	turnPID.disable();
+        	
+    	} else if(Robot.state == RobotState.Robot){
+    		
+        	turnPID = new PIDController(rkp, rki, rkd, navx, turn);//change to navx for real robot
+        	turnPID.setOutputRange(-0.35, 0.35);
+        	turnPID.setInputRange(-180.0, 180.0);
+        	turnPID.setContinuous();
+        	turnPID.setAbsoluteTolerance(3);
+        	turnPID.disable();
+        	
+    	}
     }
 
     	
@@ -154,8 +166,9 @@ public class DriveTrain extends Subsystem {
     	lDistPID.disable();
     	rDistPID.disable();
     	turnPID.disable();
-    	drivelib.tankDrive(-leftjoy.smoothGetY(), -rightjoy.smoothGetY());
+    	//drivelib.tankDrive(-leftjoy.smoothGetY(), -rightjoy.smoothGetY());
     	
+    	newDrive((-leftjoy.smoothGetY()- -rightjoy.smoothGetY())/2, (-leftjoy.smoothGetY() + -rightjoy.smoothGetY())/2);
     	
     }
     
@@ -182,6 +195,17 @@ public class DriveTrain extends Subsystem {
     	rDistPID.setOutputRange(-power + gkp*gyroError, power + gkp*gyroError);
     	System.out.println("Left power:  " + (power-gkp*gyroError));
     	System.out.println("Right power:  " + (power + gkp*gyroError));
+    }
+    
+    public void SmartDriveGyroFast(double heading, double power){
+    	double gkpFast = .09;
+    	power = Math.abs(power);
+    	double gyroError = calcGyroError(heading);
+    	System.out.println("GyroError:  " + gyroError);
+    	lDistPID.setOutputRange(-power - gkpFast*gyroError, power - gkpFast*gyroError);
+    	rDistPID.setOutputRange(-power + gkpFast*gyroError, power + gkpFast*gyroError);
+    	System.out.println("Left power:  " + (power-gkpFast*gyroError));
+    	System.out.println("Right power:  " + (power + gkpFast*gyroError));
     }
     
     public void SmartDriveRot(double degrees){
@@ -291,23 +315,33 @@ public class DriveTrain extends Subsystem {
     /*
      * 
      * new WIP arcade drive. currently a lot smoother than default WPILIB
+     * also allows for much easier correction of both arcade and tank drive at the same time
      */
     public void newDrive(double horizontal, double vertical){
     	
     	double[] vector = calcVector(horizontal, vertical);
     	errorT = horizontal;
     	errorM = vertical;
+
+    	double counter=Robot.currentlimit.getCount();
+    	double correction = Math.pow(counter,2) * correctionConstant;
+    	
     	
     	
     	double left = Math.max(Math.min(mKp*errorM + mKd * (RobotMap.driveTrainLeftDriveEncoder.getRate()-prevLE) + nKp*errorT + nKd * (errorT-prevErrorT), 1), -1);
     	double right = Math.max(Math.min(mKp*errorM + mKd * (RobotMap.driveTrainRightDriveEncoder.getRate()-prevRE) - nKp*errorT - nKd * (errorT-prevErrorT), 1), -1);
-    	drivelib.tankDrive(left, right);
+
+    	double leftSign = left/Math.abs(left);
+    	double rightSign = right/Math.abs(right);
+    	drivelib.tankDrive(left-correction*leftSign, right-correction*rightSign);
     	prevErrorT = errorT;
     	prevErrorM = errorM;
     	prevLE = RobotMap.driveTrainLeftDriveEncoder.getRate();
     	prevRE = RobotMap.driveTrainRightDriveEncoder.getRate();
     }
     
+    
+    // do we need? doesn't seem like it
     private double[] calcVector(double horizontal, double vertical){
     	double vector[] = new double[2];
     	
@@ -319,4 +353,3 @@ public class DriveTrain extends Subsystem {
     	return vector;
     }
 }
-

@@ -9,14 +9,14 @@ public class ProcessImage {
 	
 	Rect left, right;
 	State num = State.zero;
-	Target target = Vision.type;
+	Target target;
 	double centerX, centerY;
 	double[] coordinate = new double[2];
 	double angle, distance;
 	
-	double kAngleView = 68.5;
-	double tHeight = 480;
-	double tWidth = 640;
+	double kAngleView = Constants.fov;
+	double tHeight = Constants.kHeight;
+	double tWidth = Constants.kWidth;
 	
 	public enum State{
 		zero, one, two;
@@ -48,7 +48,7 @@ public class ProcessImage {
 	}
 	
 	public void run(){
-		target = Vision.type;
+		target = Robot.vision.getTarget();
 		CalcCenter();
 		CalcAngle();
 		CalcDistance();
@@ -85,10 +85,13 @@ public class ProcessImage {
 		}
 		coordinate[0] = centerX;
 		coordinate[1] = centerY;
+		System.out.println("X: " + coordinate[0] + " Y: " + coordinate[1]);
 	}
 	
 	private void CalcAngle(){
 		System.out.println("Calculating Angle");
+		angle = (centerX - tWidth/2) / (tWidth/2); // assumes pixel width is constant -- need to tweak
+		/*
 		switch(num){
 		case one:
 			angle = (2* left.height * Math.tan(kAngleView)) / tHeight;
@@ -99,13 +102,15 @@ public class ProcessImage {
 		default:
 			break;
 		}
+		*/
 		System.out.println("Angle: " + angle);
 	}
 	
 	private void CalcDistance() {
 		System.out.println("Calculating Distance");
+		distance = 0;
 		switch(target){
-		case GreenTape: distance = (Constants.greenTape.getHeight() * tHeight)/(2*(left.height + right.height)/2*Math.tan(kAngleView));
+		case GreenTape: distance = (Constants.greenTape.getHeight() * tHeight)/(2*(left.height/* + right.height*/)/2*Math.tan(kAngleView));
 			break;
 		case YellowSittingGear: distance = (Constants.yellowGearSitting.getHeight() * tHeight)/(2*(left.height)*Math.tan(kAngleView));
 			break;

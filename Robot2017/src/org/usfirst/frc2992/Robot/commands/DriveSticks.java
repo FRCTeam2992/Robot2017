@@ -31,7 +31,6 @@ public class DriveSticks extends Command {
 	public mhJoystick leftJoy;
 	public mhJoystick rightJoy;
 	
-	public double offset = .45;
 	public double counter = 0;
 	
     public DriveSticks() {
@@ -55,37 +54,13 @@ public class DriveSticks extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	counter++;
-    	
     	leftJoy = Robot.oi.getLeftJoy();
     	rightJoy = Robot.oi.getRightJoy();
     	
-    	if(Robot.oi.getRightJoy().getTrigger()){
-    		RobotMap.driveTrainDriveShfitHL.set(false);
-    		
+    	if(Robot.driveTrain.isTankDrive()){
+    		Robot.driveTrain.tankDrive(leftJoy, rightJoy);
     	} else {
-    		RobotMap.driveTrainDriveShfitHL.set(true);
-    	}
-    	
-    	/*
-    	 * not sure if I like this yet -- designed to help avoid hitting middle spoke of gear on peg
-    	 */
-    	if(Robot.oi.getLeftJoy().getTrigger()){
-    		if(Robot.driveTrain.isTankDrive()){
-    			Robot.driveTrain.tankDriveAuto(-leftJoy.smoothGetY() + offset, -rightJoy.smoothGetY() - offset);
-    			offset = -offset;
-    		} else {
-    			Robot.driveTrain.ArcadeDrive(-rightJoy.smoothGetY(), leftJoy.smoothGetX() + offset);
-    			offset = -offset;
-    	}
-    		
-    		
-    	} else {
-    		if(Robot.driveTrain.isTankDrive()){
-        		Robot.driveTrain.tankDrive(leftJoy, rightJoy);
-        	} else {
-        		Robot.driveTrain.ArcadeDrive(leftJoy, rightJoy);
-        	}
+    		Robot.driveTrain.ArcadeDrive(leftJoy, rightJoy);
     	}
     	
     	if(Robot.oi.getLeftJoy().getRawButton(5)){

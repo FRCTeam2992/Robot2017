@@ -18,7 +18,7 @@ public class DriveTurn extends Command {
 	Timer totalTime;
 	double power;
 	static final double MINPOWER = 0.1;
-	static final double MAXPOWER = 0.5;
+	static final double MAXPOWER = 0.7;
 	static final double POWERRAMP = 0.005;
 
 	public DriveTurn(double degree, double time) {
@@ -52,7 +52,7 @@ public class DriveTurn extends Command {
 		if(totalTime.get() > mTime || Robot.driveTrain.driveDone("rot")){
     		return true; 
     	} else{
-    		return true;
+    		return false;
     	}
 		
 	}

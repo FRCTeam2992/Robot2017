@@ -68,8 +68,8 @@ public class GearSystem extends Subsystem {
     	feedRampUpDown.set(true);
     	//jumpRampInOut.set(false);
     	//deckUpDown.set(true);
-    	leftGearHold.setAngle(50);
-    	rightGearHold.setAngle(120);
+    	leftGearHold.setAngle(20);
+    	rightGearHold.setAngle(150);
     	//System.out.println("1");
     }
     
@@ -142,8 +142,8 @@ public class GearSystem extends Subsystem {
     	feedRampUpDown.set(true);
     	//jumpRampInOut.set(true);
     	//deckUpDown.set(false);
-    	leftGearHold.setAngle(50);
-    	rightGearHold.setAngle(120);
+    	leftGearHold.setAngle(20);
+    	rightGearHold.setAngle(150);
     	//System.out.println("5");
     }
     

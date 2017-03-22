@@ -72,8 +72,8 @@ public class Climber extends Subsystem {
     	if(Math.abs(value) <= .45){
     		value = 0;
     	}
-    	climbAMotor.set((-value + 1)/2);
-    	climbBMotor.set((-value + 1)/2);
+    	climbAMotor.set(Math.max(0.4, (-value + 1)/2));
+    	climbBMotor.set(Math.max(0.4, (-value + 1)/2));
     }
     
 }

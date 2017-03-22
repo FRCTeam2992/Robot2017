@@ -147,7 +147,5 @@ public class FollowPath extends TimerTask implements FollowerOutput {
 		leftD = 0;
 		rightD = 0;
 	}
-
-	
 	
 }

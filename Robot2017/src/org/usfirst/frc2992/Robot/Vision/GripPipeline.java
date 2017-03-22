@@ -2,6 +2,10 @@ package org.usfirst.frc2992.Robot.Vision;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.VideoMode;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.vision.VisionPipeline;
 
 import org.opencv.core.*;
@@ -22,6 +26,7 @@ public class GripPipeline implements VisionPipeline {
 	private Mat hsvThresholdOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 	private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
+	
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -33,9 +38,9 @@ public class GripPipeline implements VisionPipeline {
 	@Override	public void process(Mat source0) {
 		// Step HSV_Threshold0:
 		Mat hsvThresholdInput = source0;
-		double[] hsvThresholdHue = {Constants.yellowGearStanding.hsvThresholdHue[0], Constants.yellowGearStanding.hsvThresholdHue[1]};
-		double[] hsvThresholdSaturation = {Constants.yellowGearStanding.hsvThresholdSaturation[0], Constants.yellowGearStanding.hsvThresholdSaturation[1]};
-		double[] hsvThresholdValue = {Constants.yellowGearStanding.hsvThresholdValue[0], Constants.yellowGearStanding.hsvThresholdValue[1]};
+		double[] hsvThresholdHue = {Constants.gtHue[0], Constants.gtHue[1]};
+		double[] hsvThresholdSaturation = {Constants.gtSat[0], Constants.gtSat[1]};
+		double[] hsvThresholdValue = {Constants.gtVal[0], Constants.gtVal[1]};
 		hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
 		// Step Find_Contours0:
@@ -45,19 +50,22 @@ public class GripPipeline implements VisionPipeline {
 
 		// Step Filter_Contours0:
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-		double filterContoursMinArea = 10.0;
+		double filterContoursMinArea = 0.0;
 		double filterContoursMinPerimeter = 0.0;
-		double filterContoursMinWidth = 34.0;
-		double filterContoursMaxWidth = 480.0;
-		double filterContoursMinHeight = 35.0;
-		double filterContoursMaxHeight = 640.0;
-		double[] filterContoursSolidity = {0.0, 100.0};
-		double filterContoursMaxVertices = 1000000;
-		double filterContoursMinVertices = 0;
-		double filterContoursMinRatio = 0.35;
-		double filterContoursMaxRatio = 1000;
+		double filterContoursMinWidth = 0.0;
+		double filterContoursMaxWidth = 100.0;
+		double filterContoursMinHeight = 0.0;
+		double filterContoursMaxHeight = 100.0;
+		double[] filterContoursSolidity = {52.0, 100.0};
+		double filterContoursMaxVertices = 12;
+		double filterContoursMinVertices = 5;
+		double filterContoursMinRatio = 0.5;
+		double filterContoursMaxRatio = 0.6;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 
+		CvSource cSource = new CvSource("cSource", VideoMode.PixelFormat.kMJPEG, 320,240,20);
+		cSource.putFrame(hsvThresholdOutput);
+		CameraServer.getInstance().getServer().setSource(cSource);
 	}
 
 	/**
@@ -176,4 +184,3 @@ public class GripPipeline implements VisionPipeline {
 
 
 }
-

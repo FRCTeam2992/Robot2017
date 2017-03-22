@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Intake extends Subsystem {
-	final double feedSpeed = -.4;
+	final double feedSpeed = -1.0;
 	final double feedConstant = 1;
 	
 	double feedValue = 0;
@@ -50,7 +50,7 @@ public class Intake extends Subsystem {
 
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
-    	setDefaultCommand(new FeedWheelsSticks());
+    	setDefaultCommand(new FeedWheelsInStop());
     }
     public void Intake() {
     	
@@ -83,4 +83,3 @@ public class Intake extends Subsystem {
     	return feedValue;
     }
 }
-

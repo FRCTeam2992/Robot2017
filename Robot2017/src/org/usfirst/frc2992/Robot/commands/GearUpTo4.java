@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class GearUpTo4 extends Command{
 	int state;
 	Timer timer;
-	double maxTime = .5;
+	double maxTime = .35;
 	
 	public GearUpTo4(){
 		requires(Robot.gearSystem);

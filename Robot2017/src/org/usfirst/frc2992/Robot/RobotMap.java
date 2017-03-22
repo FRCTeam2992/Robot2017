@@ -182,7 +182,7 @@ public class RobotMap {
         
         rightmotors.add(driveTrainR3Motor = new Victor(7));
         LiveWindow.addActuator("DriveTrain", "R3Motor", (LiveWindowSendable) driveTrainR3Motor);
-        driveTrainR3Motor.setInverted(true);
+        driveTrainR3Motor.setInverted(true); // hardware issue -- no clue, but needs to be reversed -- 3/17/17 apparently back to normal???
         
         climberClimbAMotor = new Victor(5);
         LiveWindow.addActuator("Climber", "ClimbAMotor", (LiveWindowSendable) climberClimbAMotor);
@@ -190,17 +190,17 @@ public class RobotMap {
         climberClimbBMotor = new Talon(12); // 12 on practice bot
         LiveWindow.addActuator("Climber", "ClimbBMotor", (Talon) climberClimbBMotor);
 
-        intakeFeedLeftMotor = new VictorSP(10);// 9 on practice bot
+        intakeFeedLeftMotor = new VictorSP(10);// 10 on practice bot
         //LiveWindow.addActuator("Intake", "FeedLeftMotor", (VictorSP) intakeFeedLeftMotor);
         
-        intakeFeedRightMotor = new VictorSP(11);// 8 on practice bot
+        intakeFeedRightMotor = new VictorSP(11);// 11 on practice bot
         //LiveWindow.addActuator("Intake", "FeedRightMotor", (VictorSP) intakeFeedRightMotor);
 
-        gearSystemLeftGearHold = new Servo(8);// note -- figure out port on backup bot
+        gearSystemLeftGearHold = new Servo(9);// 9 on practice bot
         //gearSystemLeftGearHold.setBounds(2.1, 1.5, 1.5, 1.5, 0.9);
         LiveWindow.addActuator("GearSystem", "LeftGearHold", gearSystemLeftGearHold);
 
-        gearSystemRightGearHold = new Servo(9);// note -- find out port on backup bot
+        gearSystemRightGearHold = new Servo(8);// 8 on practice bot
         //gearSystemRightGearHold.setBounds(2.1, 1.5, 1.5, 1.5, 0.9);
         LiveWindow.addActuator("GearSystem", "RightGearHold", gearSystemRightGearHold);
         
@@ -208,12 +208,12 @@ public class RobotMap {
         
         driveTrainLeftDriveEncoder = new Encoder(0, 1, false, EncodingType.k4X);
         LiveWindow.addSensor("DriveTrain", "LeftDriveEncoder", driveTrainLeftDriveEncoder);
-        driveTrainLeftDriveEncoder.setDistancePerPulse((6* 3.14 * 24) / (128 * 60 * 3));
+        driveTrainLeftDriveEncoder.setDistancePerPulse(Constants.encoderDistPerPulseLow);
         driveTrainLeftDriveEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
         
         driveTrainRightDriveEncoder = new Encoder(2, 3, true, EncodingType.k4X);
         LiveWindow.addSensor("DriveTrain", "RightDriveEncoder", driveTrainRightDriveEncoder);
-        driveTrainRightDriveEncoder.setDistancePerPulse((6* 3.14 * 24) / (128 * 60 * 3));
+        driveTrainRightDriveEncoder.setDistancePerPulse(Constants.encoderDistPerPulseLow);
         driveTrainRightDriveEncoder.setPIDSourceType(PIDSourceType.kDisplacement);
         
         driveTrainDriveShfitHL = new Solenoid(0);
