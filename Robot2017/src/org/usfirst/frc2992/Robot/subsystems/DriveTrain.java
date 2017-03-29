@@ -71,7 +71,7 @@ public class DriveTrain extends Subsystem {
     final double dkd = .12;
     final double dkf = 1/72/200;
     
-    double gkp = .03; 
+    double gkp = .045; 
     
     double nKp = 1;
     double nKd = .15; // 0 on real bot
@@ -94,7 +94,7 @@ public class DriveTrain extends Subsystem {
     final double rki = .01;
     final double rkd = .056;
     
-    boolean isTank = true;
+    boolean isJoySwitched = true;
     
 
 
@@ -304,12 +304,12 @@ public class DriveTrain extends Subsystem {
     }
 	
     
-    public void setTankDrive(boolean current){
-    	isTank = current;
+    public void setJoySwitched(boolean current){
+    	isJoySwitched = current;
     }
     
-    public boolean isTankDrive(){
-    	return isTank;
+    public boolean isJoySwitched(){
+    	return isJoySwitched;
     }
   
     /*

@@ -62,6 +62,7 @@ public class CurrentLimit {
 		
 	public void LimitCurrent(){
 		if(Robot.state	==	Robot.RobotState.Robot){
+			/*
 		if(wholeCurrent > 120){
 			Counter ++;
 			
@@ -77,6 +78,8 @@ public class CurrentLimit {
 			if(wholeCurrent >= 8){
 				Counter = 0;
 			}
+			*/
+			Counter = 0;
 		}
 			
 	}

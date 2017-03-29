@@ -57,17 +57,17 @@ public class DriveSticks extends Command {
     	leftJoy = Robot.oi.getLeftJoy();
     	rightJoy = Robot.oi.getRightJoy();
     	
-    	if(Robot.driveTrain.isTankDrive()){
+    	if(Robot.driveTrain.isJoySwitched()){
     		Robot.driveTrain.tankDrive(leftJoy, rightJoy);
     	} else {
-    		Robot.driveTrain.ArcadeDrive(leftJoy, rightJoy);
+    		Robot.driveTrain.tankDrive(rightJoy, leftJoy);
     	}
     	
-    	if(Robot.oi.getLeftJoy().getRawButton(5)){
-    		Robot.driveTrain.setTankDrive(true);
+    	if(Robot.oi.getLeftJoy().getRawButton(5) || Robot.oi.getRightJoy().getRawButton(5)){
+    		Robot.driveTrain.setJoySwitched(true);
     	}
-    	if(Robot.oi.getLeftJoy().getRawButton(6)){
-    		Robot.driveTrain.setTankDrive(false);
+    	if(Robot.oi.getLeftJoy().getRawButton(6) || Robot.oi.getRightJoy().getRawButton(6 )){
+    		Robot.driveTrain.setJoySwitched(false);
     	}
     	
     	
