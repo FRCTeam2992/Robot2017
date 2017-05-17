@@ -2,7 +2,6 @@ package Autonomous;
 
 import org.usfirst.frc2992.Robot.Robot;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveStop extends Command {

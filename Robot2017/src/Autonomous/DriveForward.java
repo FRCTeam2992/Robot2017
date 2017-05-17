@@ -1,12 +1,9 @@
 package Autonomous;
 
 
+import org.usfirst.frc2992.Robot.Constants;
 import org.usfirst.frc2992.Robot.Robot;
 import org.usfirst.frc2992.Robot.RobotMap;
-import org.usfirst.frc.frc2992.MyRobot.lib.TimedBoolean;
-
-
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,14 +17,12 @@ public class DriveForward extends Command {
 	Timer totalTime;
 	double curPower;
 	
-	static final double MINPOWER = 0.15;
-	static final double MAXPOWER = 0.6;
-	static final double POWERRAMP = 0.03;
+	static final double MINPOWER = Constants.driveForwardMinSpeed;
+	static final double MAXPOWER = Constants.driveForwardMaxSpeed;
+	static final double POWERRAMP = Constants.driveForwardRampRate;
 	
 	boolean mGyro;
 	double mHeading;
-	
-	//TimedBoolean timer;
 
 	public DriveForward(double dist, double time) {
 		mGyro = false;

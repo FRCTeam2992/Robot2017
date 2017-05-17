@@ -8,13 +8,17 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Shifter extends Subsystem{
 
-	Solenoid shifter = RobotMap.driveTrainDriveShfitHL;
-	shiftMode sMode;
-	boolean isHigh = false;
-	boolean isShifting = false;
+	private final Solenoid shifter = RobotMap.driveTrainDriveShfitHL;
+	private shiftMode sMode;
+	private boolean isHigh = false;
+	private boolean isShifting = false;
 	
 	public Shifter(shiftMode s){
 		sMode = s;
+	}
+	
+	public Shifter(){
+		sMode = shiftMode.normal;
 	}
 	
 	@Override
@@ -23,6 +27,7 @@ public class Shifter extends Subsystem{
 		setDefaultCommand(new ShiftDown());
 	}
 	
+	// designed to allow multiple shift points as desired
 	public enum shiftMode{
 		normal, smooth, aggressive;
 	}

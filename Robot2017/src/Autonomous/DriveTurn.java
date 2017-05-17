@@ -7,7 +7,6 @@ import org.usfirst.frc2992.Robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTurn extends Command {
 	

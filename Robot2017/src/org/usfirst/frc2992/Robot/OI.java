@@ -13,8 +13,6 @@ package org.usfirst.frc2992.Robot;
 
 import org.usfirst.frc.frc2992.MyRobot.lib.mhJoystick;
 import org.usfirst.frc2992.Robot.commands.*;
-import org.usfirst.frc2992.Robot.subsystems.*;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.*;
@@ -165,7 +163,6 @@ public class OI {
 
         // SmartDashboard Buttons
         
-        //SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
         SmartDashboard.putData("DriveSticks", new DriveSticks());
         SmartDashboard.putData("ClimbUp", new ClimbUp());
         SmartDashboard.putData("ClimbStop", new ClimbStop());

@@ -3,10 +3,6 @@ package Autonomous;
 
 import org.usfirst.frc2992.Robot.Robot;
 import org.usfirst.frc2992.Robot.RobotMap;
-import org.usfirst.frc.frc2992.MyRobot.lib.TimedBoolean;
-
-
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,7 +23,6 @@ public class DriveTest extends Command {
 	boolean mGyro;
 	double mHeading;
 	
-	//TimedBoolean timer;
 
 	public DriveTest(double distL, double distR, double time, double heading) {
 		mGyro = true;
@@ -50,7 +45,6 @@ public class DriveTest extends Command {
 		mTime = time;
 		
 		totalTime = new Timer();
-		//timer = new TimedBoolean(time);
 		
 		requires(Robot.driveTrain);
 		// TODO Auto-generated constructor stub

@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.vision.VisionThread;
 
 /**
- * hasUpdated must be set to false to run. This is done by utilizing Run() and is intended to allow single use processing.
+ * hasUpdated must be set to false to run. This is done by utilizing Run() and is intended to allow single use processing. 
+ * This will automatically stop calculations after every cycle, so in order for consistent updates, you need to set hasUpdated 
+ * to false every cycle that is needed.
  * TODO test to ensure that this fully works as intended. may need tweaking for accuracy.
  */
 public class Vision {

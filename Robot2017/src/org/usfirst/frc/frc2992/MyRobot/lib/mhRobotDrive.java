@@ -2,10 +2,6 @@ package org.usfirst.frc.frc2992.MyRobot.lib;
 
 import java.util.ArrayList;
 
-import org.usfirst.frc2992.Robot.Constants;
-import org.usfirst.frc2992.Robot.RobotMap;
-
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.PIDController;

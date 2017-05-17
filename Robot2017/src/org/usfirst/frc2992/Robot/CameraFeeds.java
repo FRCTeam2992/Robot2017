@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class CameraFeeds extends TimerTask{
 
-	int[] kRes = {280, 210}; // default to 320x240
-	int kFPS = 20; // default to 30 fps
+	int[] kRes = {Constants.kWidth, Constants.kHeight}; // default to 320x240
+	int kFPS = Constants.kFPS; // default to 20 fps
 	int width = kRes[0];
 	int height = kRes[1];
 	

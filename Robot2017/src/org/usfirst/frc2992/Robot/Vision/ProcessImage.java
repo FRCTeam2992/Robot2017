@@ -88,6 +88,9 @@ public class ProcessImage {
 		System.out.println("X: " + coordinate[0] + " Y: " + coordinate[1]);
 	}
 	
+	/**
+	 * @TODO needs tweaking
+	 */
 	private void CalcAngle(){
 		System.out.println("Calculating Angle");
 		angle = (centerX - tWidth/2) / (tWidth/2); // assumes pixel width is constant -- need to tweak
@@ -106,6 +109,9 @@ public class ProcessImage {
 		System.out.println("Angle: " + angle);
 	}
 	
+	/**
+	 * @TODO needs tweaking, definitely wrong formula currently- was just used for testing purposes
+	 */
 	private void CalcDistance() {
 		System.out.println("Calculating Distance");
 		distance = 0;

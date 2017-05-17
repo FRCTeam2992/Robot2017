@@ -1,7 +1,6 @@
 package org.usfirst.frc2992.Robot;
 
 import java.util.ArrayList;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import org.usfirst.frc.frc2992.MyRobot.MotionProfiling.*;

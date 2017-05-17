@@ -4,15 +4,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 
-import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
-
 import java.io.FileWriter;
 
 public class OutputLog {
 	File log;
 	FileWriter fileWrite;
 	BufferedWriter printLine;
-	String filePath = "/home/lvuser/Output.txt";
+	String filePath = Constants.testPath;
 	double lineNum = 0;
 	public OutputLog() throws IOException{
 		log = new File(filePath);

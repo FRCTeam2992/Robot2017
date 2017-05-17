@@ -14,6 +14,9 @@ public class PickTarget {
 		this.type = type;
 	}
 	
+	/**
+	 * @TODO doesn't switch out values currently. update before code is in productions
+	 */
 	public void Run(){
 	}
 }

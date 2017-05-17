@@ -11,11 +11,10 @@
 
 package org.usfirst.frc2992.Robot.subsystems;
 
+import org.usfirst.frc2992.Robot.Constants;
 import org.usfirst.frc2992.Robot.RobotMap;
 import org.usfirst.frc2992.Robot.commands.*;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Talon;
-
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 
@@ -23,8 +22,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Intake extends Subsystem {
-	final double feedSpeed = -1.0;
-	final double feedConstant = 1;
+	final double feedSpeed = Constants.FeedSpeed;
+	final double feedConstant = Constants.feedConstant;
 	
 	double feedValue = 0;
 
@@ -51,9 +50,6 @@ public class Intake extends Subsystem {
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
     	setDefaultCommand(new FeedWheelsInStop());
-    }
-    public void Intake() {
-    	
     }
     
     public void FeedIn() {

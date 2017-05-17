@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class AutoMidGear extends CommandGroup{
 
 	public AutoMidGear(){
+		addSequential(new WaitCommand(2));
 		addSequential(new DriveForward(71.5, 4, true, 0));
 		addSequential(new GearPos4());
 		addSequential(new WaitCommand(.75));

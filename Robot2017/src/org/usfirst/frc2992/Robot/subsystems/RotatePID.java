@@ -5,9 +5,6 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 import java.util.ArrayList;
 
-import org.usfirst.frc.frc2992.MyRobot.lib.mhRobotDrive;
-import org.usfirst.frc2992.Robot.*;
-
 public class RotatePID implements PIDOutput {
 
 	private ArrayList<SpeedController> lDrive;

@@ -2,7 +2,6 @@ package org.usfirst.frc2992.Robot.subsystems;
 
 import java.util.ArrayList;
 
-import org.usfirst.frc2992.Robot.*;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
 

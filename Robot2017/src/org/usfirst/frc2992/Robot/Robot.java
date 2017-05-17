@@ -11,9 +11,6 @@
 
 package org.usfirst.frc2992.Robot;
 
-import edu.wpi.cscore.VideoMode;
-import edu.wpi.cscore.VideoMode.PixelFormat;
-import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -26,7 +23,6 @@ import java.io.IOException;
 
 import org.usfirst.frc.frc2992.MyRobot.lib.mhRobotDrive;
 import org.usfirst.frc2992.Robot.Vision.Vision;
-import org.usfirst.frc2992.Robot.commands.*;
 import org.usfirst.frc2992.Robot.subsystems.*;
 import org.usfirst.frc2992.Robot.subsystems.Shifter.shiftMode;
 
@@ -70,7 +66,7 @@ public class Robot extends IterativeRobot {
     public static Vision vision;
     
    // public static CameraFeeds camerafeed;
-    public static int[] cameraRes = {320, 240};
+    public static int[] cameraRes = {Constants.kWidth, Constants.kHeight};
 	int width = cameraRes[0];
 	int height = cameraRes[1];
     
@@ -152,8 +148,8 @@ public class Robot extends IterativeRobot {
     }
 
     public void autonomousInit() {
-    	RobotMap.gearSystemLeftGearHold.setAngle(170);
-    	RobotMap.gearSystemRightGearHold.setAngle(0);
+    	RobotMap.gearSystemLeftGearHold.setAngle(Constants.leftServoIn);
+    	RobotMap.gearSystemRightGearHold.setAngle(Constants.rightServoIn);
     	RobotMap.navx.reset();
     	RobotMap.gyro.reset();
         gearSystem.gear1to2();
@@ -200,8 +196,8 @@ public class Robot extends IterativeRobot {
         gearSystem.gear2to3();
         gearSystem.gear5to4();
         gearSystem.gear4to3();
-    	RobotMap.gearSystemLeftGearHold.setAngle(170);
-    	RobotMap.gearSystemRightGearHold.setAngle(0);
+    	RobotMap.gearSystemLeftGearHold.setAngle(Constants.leftServoIn);
+    	RobotMap.gearSystemRightGearHold.setAngle(Constants.rightServoIn);
         
         RobotMap.navx.reset();
       
@@ -286,7 +282,7 @@ public class Robot extends IterativeRobot {
     		case 0:	autonomousCommand = new DriveStop();
     				autoName = "Stand Still";
     				break;
-    		case 1: autonomousCommand = new AutoMidGear();
+    		case 1: autonomousCommand = new AutoMidGear(); // secondary middle autonomous code. overall slower
     				autoName = "Middle Gear";
     				break;
     		case 2: autonomousCommand = new AutoLeftGearRED();
@@ -301,11 +297,9 @@ public class Robot extends IterativeRobot {
     		case 5: autonomousCommand = new AutoRightGearBLUE();
     				autoName = "Right BLUE Gear";
     				break;
-    		case 6:	autonomousCommand = new AutoMidGearFAST();
+    		case 6:	autonomousCommand = new AutoMidGearFAST(); // competition middle autonomous code
     				autoName = "GOTTA GO FAST";
     				break;
-    		case 7: //autonomousCommand = new AutoMoat();
-    				autoName = "";
     		default: autonomousCommand = new DriveStop();
     				autoName = "Default Do Nothing";
     				break;
