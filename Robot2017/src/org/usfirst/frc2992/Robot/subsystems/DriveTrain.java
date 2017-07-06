@@ -155,7 +155,13 @@ public class DriveTrain extends Subsystem {
     	turnPID.disable();
     	//drivelib.tankDrive(-leftjoy.smoothGetY(), -rightjoy.smoothGetY());
     	
-    	newDrive((-leftjoy.smoothGetY()- -rightjoy.smoothGetY())/2, (-leftjoy.smoothGetY() + -rightjoy.smoothGetY())/2);
+    	// Modified to use left joystick trigger to run in reverse.  Forward is running with the climber side first, backwards for gear delivery
+    	boolean direction = leftjoy.getRawButton(1);  // Press left trigger to drive in reverse
+    	if (direction) {
+        	newDrive((-leftjoy.smoothGetY()- -rightjoy.smoothGetY())/2, (-leftjoy.smoothGetY() + -rightjoy.smoothGetY())/2);    		
+    	} else {
+        	newDrive((rightjoy.smoothGetY()- leftjoy.smoothGetY())/2, (rightjoy.smoothGetY() + leftjoy.smoothGetY())/2);
+    	}
     	
     }
     
